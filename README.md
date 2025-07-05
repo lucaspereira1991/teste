@@ -14,5 +14,5 @@ Para rodar localmente:
 ```powershell
 cd frontend
 npm install
-npm run build
+
 ```
