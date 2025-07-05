@@ -1,0 +1,45 @@
+name: Build and Release Frontend
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version number'
+        required: true
+        type: string
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Build project
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Archive build artifact
+        run: |
+          cd frontend/dist
+          zip -r ../../frontend-dist.zip .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.event.inputs.version }}
+          name: Release v${{ github.event.inputs.version }}
+          files: frontend-dist.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
