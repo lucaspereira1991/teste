@@ -1,12 +1,9 @@
 name: Build and Release Frontend
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Release version number'
-        required: true
-        type: string
+  push:
+    branches:
+      - lucas
 
 jobs:
   build-and-release:
